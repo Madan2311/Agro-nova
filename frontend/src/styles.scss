@@ -1,0 +1,73 @@
+@use '@angular/material' as mat;
+
+html {
+  color-scheme: light;
+  @include mat.theme((
+    color: mat.$green-palette,
+    typography: (
+      plain-family: 'Hanken Grotesk',
+      brand-family: 'Young Serif',
+      bold-weight: 700,
+      medium-weight: 600,
+      regular-weight: 400,
+    ),
+    density: 0,
+  ));
+}
+
+:root {
+  --ag-forest: #1e5b3a;
+  --ag-marigold: #f0b429;
+  --ag-mist: #edf1ea;
+  --ag-paper: #fbfcfa;
+  --ag-ink: #1f2b22;
+  --ag-muted: #55645a;
+  --ag-line: #d3dbcf;
+
+  --ag-font-body: 'Hanken Grotesk', system-ui, sans-serif;
+  --ag-font-display: 'Young Serif', Georgia, serif;
+
+  --mat-sys-primary: var(--ag-forest);
+  --mat-sys-on-primary: #ffffff;
+  --mat-sys-primary-container: #cfe5d3;
+  --mat-sys-on-primary-container: #0b2e1b;
+  --mat-sys-background: var(--ag-mist);
+  --mat-sys-surface: var(--ag-paper);
+  --mat-sys-on-surface: var(--ag-ink);
+  --mat-sys-outline: #7f8d83;
+  --mat-sys-outline-variant: var(--ag-line);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--ag-mist);
+  color: var(--ag-ink);
+  font-family: var(--ag-font-body);
+  -webkit-font-smoothing: antialiased;
+  font-variant-numeric: tabular-nums;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--ag-font-display);
+  font-weight: 400;
+  margin: 0;
+}
+
+:focus-visible {
+  outline: 3px solid var(--ag-forest);
+  outline-offset: 2px;
+}
+
+.mat-mdc-snack-bar-container.snack-error {
+  --mat-snack-bar-container-color: #8c2f1b;
+  --mat-snack-bar-supporting-text-color: #ffffff;
+  --mat-snack-bar-button-color: #ffd9a0;
+}

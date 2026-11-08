@@ -1,0 +1,116 @@
+<main class="page">
+  <a class="back" routerLink="/products">
+    <mat-icon>arrow_back</mat-icon>
+    Volver al inventario
+  </a>
+
+  @if (loading() && !product()) {
+    <div class="state" role="status">
+      <mat-spinner diameter="32" />
+      <p>Cargando producto…</p>
+    </div>
+  } @else if (failed() && !product()) {
+    <div class="state">
+      <h1>No encontramos este producto</h1>
+      <p>Puede que haya sido eliminado o que el enlace no sea correcto.</p>
+      <a matButton="filled" routerLink="/products">Ir al inventario</a>
+    </div>
+  } @else if (product(); as p) {
+    <article class="detail">
+      <div class="media">
+        @if (p.imageUrl && !imageFailed()) {
+          <img [src]="p.imageUrl" [alt]="'Imagen de ' + p.name" (error)="imageFailed.set(true)" />
+        } @else {
+          <div class="placeholder" role="img" aria-label="Producto sin imagen">
+            <svg width="56" height="56" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+              <path d="M16 29V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              <path d="M16 16C16 10 11.5 6.5 5 6.5 5 12.5 9 16 16 16Z" fill="currentColor" />
+              <path d="M16 13C16 8 20 4.5 27 4.5 27 10 23 13 16 13Z" fill="var(--ag-marigold)" />
+            </svg>
+            <span>Sin imagen</span>
+          </div>
+        }
+      </div>
+
+      <div class="info">
+        <header>
+          <div class="badges">
+            @if (p.category) {
+              <span class="chip" [style.--c]="color(p.category)">{{ p.category }}</span>
+            }
+            <span class="status" [class.status--off]="p.active === false">
+              {{ p.active === false ? 'Inactivo' : 'Activo' }}
+            </span>
+          </div>
+          <h1>{{ p.name }}</h1>
+          <p class="sku">SKU {{ p.sku }}</p>
+        </header>
+
+        <dl class="facts">
+          <div>
+            <dt>Precio</dt>
+            <dd class="price">{{ cop(p.price) }}</dd>
+          </div>
+          <div>
+            <dt>Disponibilidad</dt>
+            <dd>
+              <span [class]="'stock stock--' + level(p.stock)">{{ stockText(p.stock) }}</span>
+            </dd>
+          </div>
+        </dl>
+
+        <section>
+          <h2>Descripción</h2>
+          @if (p.description) {
+            <p class="desc">{{ p.description }}</p>
+          } @else {
+            <p class="muted">Este producto no tiene descripción.</p>
+          }
+        </section>
+
+        <div class="actions">
+          <button matButton="filled" type="button" (click)="edit()">
+            <mat-icon>edit</mat-icon>
+            Editar
+          </button>
+          @if (isAdmin()) {
+            <button matButton="outlined" type="button" class="danger" (click)="remove()">
+              <mat-icon>delete</mat-icon>
+              Eliminar
+            </button>
+          }
+        </div>
+      </div>
+
+      <section class="record">
+        <h2>Registro</h2>
+        <dl class="record__grid">
+          <div>
+            <dt>Creado</dt>
+            <dd>{{ date(p.createdAt) }}</dd>
+          </div>
+          <div>
+            <dt>Última actualización</dt>
+            <dd>{{ date(p.updatedAt) }}</dd>
+          </div>
+          @if (p.createdBy) {
+            <div>
+              <dt>Creado por</dt>
+              <dd class="mono">{{ p.createdBy }}</dd>
+            </div>
+          }
+          @if (p.updatedBy) {
+            <div>
+              <dt>Actualizado por</dt>
+              <dd class="mono">{{ p.updatedBy }}</dd>
+            </div>
+          }
+          <div>
+            <dt>ID del producto</dt>
+            <dd class="mono">{{ p.id }}</dd>
+          </div>
+        </dl>
+      </section>
+    </article>
+  }
+</main>

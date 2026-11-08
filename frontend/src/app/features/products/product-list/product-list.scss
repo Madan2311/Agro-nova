@@ -1,0 +1,701 @@
+:host {
+  display: block;
+}
+
+.page {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: clamp(1.25rem, 3vw, 2.5rem) clamp(1rem, 4vw, 2rem) 3rem;
+}
+
+// ---------- Encabezado ----------
+.head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.head h1 {
+  font-size: clamp(1.9rem, 3.4vw, 2.6rem);
+  line-height: 1.1;
+}
+
+.head__sub {
+  margin: 0.4rem 0 0;
+  color: var(--ag-muted);
+}
+
+.head__add {
+  --mat-button-filled-container-height: 44px;
+  --mat-button-filled-container-shape: 12px;
+}
+
+// ---------- Estructura: panel + contenido ----------
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.content {
+  min-width: 0; // permite que la tabla se encoja dentro del grid
+}
+
+@media (min-width: 960px) {
+  .layout {
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: start;
+  }
+}
+
+// ---------- Panel de filtros ----------
+.sidebar {
+  display: grid;
+  gap: 1.25rem;
+  padding: 1rem;
+  background: var(--ag-paper);
+  border: 1px solid var(--ag-line);
+  border-radius: 16px;
+}
+
+.sidebar__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sidebar__head h2 {
+  font-size: 1.25rem;
+}
+
+.sidebar__tools {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.link {
+  padding: 0.35rem 0.6rem;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ag-forest);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.link:hover {
+  background: color-mix(in srgb, var(--ag-forest) 8%, transparent);
+}
+
+.sidebar__close {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ag-ink);
+  cursor: pointer;
+}
+
+.sidebar__close:hover {
+  background: var(--ag-line);
+}
+
+.sidebar__done {
+  --mat-button-filled-container-height: 44px;
+  --mat-button-filled-container-shape: 12px;
+  width: 100%;
+}
+
+.fset {
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.fset + .fset {
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--ag-line);
+}
+
+.fset legend {
+  margin-bottom: 0.4rem;
+  padding: 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--ag-muted);
+}
+
+.opts {
+  display: grid;
+  gap: 2px;
+}
+
+// Cada opción es un radio nativo (accesible con teclado) cubierto por una fila con estilo
+.opt {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-height: 40px;
+  padding: 0 0.75rem;
+  border-radius: 10px;
+  font-size: 0.9375rem;
+  cursor: pointer;
+}
+
+.opt input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.opt:hover {
+  background: color-mix(in srgb, var(--ag-forest) 6%, transparent);
+}
+
+.opt:has(input:checked) {
+  background: color-mix(in srgb, var(--ag-forest) 10%, var(--ag-paper));
+  font-weight: 600;
+}
+
+.opt:has(input:focus-visible) {
+  outline: 3px solid var(--ag-forest);
+  outline-offset: 2px;
+}
+
+.opt__check {
+  width: 18px;
+  height: 18px;
+  margin-left: auto;
+  font-size: 18px;
+  color: var(--ag-forest);
+  visibility: hidden;
+}
+
+.opt:has(input:checked) .opt__check {
+  visibility: visible;
+}
+
+.dot {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--c);
+}
+
+.dot--all {
+  background: transparent;
+  border: 2px solid var(--ag-muted);
+}
+
+// Escritorio: panel fijo mientras se recorre la tabla
+@media (min-width: 960px) {
+  .sidebar {
+    position: sticky;
+    top: 5.25rem; // deja libre la barra superior
+    max-height: calc(100dvh - 6.5rem);
+    overflow-y: auto;
+  }
+
+  .sidebar__close,
+  .sidebar__done,
+  .filters-toggle,
+  .scrim {
+    display: none;
+  }
+}
+
+// Móvil y tablet: el panel pasa a ser un cajón lateral
+@media (max-width: 959.98px) {
+  .sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 30;
+    width: min(88vw, 340px);
+    overflow-y: auto;
+    align-content: start;
+    border-radius: 0 16px 16px 0;
+    transform: translateX(-100%);
+    visibility: hidden; // fuera de pantalla no recibe el foco del teclado
+    transition:
+      transform 0.25s ease,
+      visibility 0.25s;
+  }
+
+  .sidebar--open {
+    transform: none;
+    visibility: visible;
+    box-shadow: 0 0 40px rgba(31, 43, 34, 0.25);
+  }
+
+  .scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    background: rgba(31, 43, 34, 0.45);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+
+  .scrim--on {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar,
+  .scrim {
+    transition: none;
+  }
+}
+
+// ---------- Barra sobre la tabla ----------
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  flex: 1 1 320px;
+  gap: 0.6rem;
+  height: 48px;
+  padding: 0 0.5rem 0 0.9rem;
+  background: var(--ag-paper);
+  border: 1px solid var(--ag-line);
+  border-radius: 12px;
+  color: var(--ag-muted);
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+
+.search:focus-within,
+.sort:focus-within {
+  border-color: var(--ag-forest);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ag-forest) 18%, transparent);
+}
+
+.search input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  outline: 0; // el aro de foco lo muestra el contenedor
+  background: transparent;
+  color: var(--ag-ink);
+  font: inherit;
+}
+
+.search input::placeholder {
+  color: var(--ag-muted);
+}
+
+.search input::-webkit-search-cancel-button {
+  appearance: none; // se usa el botón propio
+}
+
+.search__clear {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ag-muted);
+  cursor: pointer;
+}
+
+.search__clear:hover {
+  background: var(--ag-line);
+}
+
+.search__clear mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}
+
+.sort {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 48px;
+  padding: 0 0.5rem 0 0.9rem;
+  background: var(--ag-paper);
+  border: 1px solid var(--ag-line);
+  border-radius: 12px;
+  color: var(--ag-muted);
+  font-size: 0.875rem;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+
+.sort select {
+  appearance: none;
+  height: 100%;
+  padding: 0 1.75rem 0 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ag-ink);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.sort mat-icon {
+  position: absolute;
+  right: 0.5rem;
+  pointer-events: none;
+}
+
+// Botón que abre el cajón (solo móvil y tablet)
+.filters-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 48px;
+  padding: 0 0.9rem;
+  background: var(--ag-paper);
+  border: 1px solid var(--ag-line);
+  border-radius: 12px;
+  color: var(--ag-ink);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.filters-toggle mat-icon {
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+}
+
+.badge {
+  display: inline-grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  background: var(--ag-marigold);
+  color: var(--ag-ink);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+@media (max-width: 959.98px) {
+  .search {
+    flex: 1 1 100%;
+  }
+
+  .filters-toggle,
+  .sort {
+    flex: 1 1 0;
+    justify-content: space-between;
+  }
+}
+
+// ---------- Contenedor de la tabla ----------
+.card {
+  position: relative;
+  overflow: hidden;
+  background: var(--ag-paper);
+  border: 1px solid var(--ag-line);
+  border-radius: 16px;
+}
+
+.card__loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+}
+
+.table {
+  --mat-table-background-color: transparent;
+  --mat-table-header-headline-color: var(--ag-muted);
+  --mat-table-header-headline-size: 0.8125rem;
+  --mat-table-header-headline-weight: 600;
+  --mat-table-row-item-label-text-color: var(--ag-ink);
+  --mat-table-row-item-outline-color: var(--ag-line);
+  --mat-table-row-item-container-height: 68px;
+  width: 100%;
+}
+
+.table .mat-mdc-row {
+  cursor: pointer;
+}
+
+.table .mat-mdc-row:hover {
+  background: color-mix(in srgb, var(--ag-forest) 5%, transparent);
+}
+
+.num {
+  text-align: right;
+}
+
+// ---------- Celdas ----------
+.product {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+  max-width: 340px;
+}
+
+.name {
+  display: block;
+  font-weight: 600;
+}
+
+.name a {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: inherit;
+  text-decoration: none;
+}
+
+.name a:hover {
+  color: var(--ag-forest);
+  text-decoration: underline;
+}
+
+.sku {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.8125rem;
+  color: var(--ag-muted);
+}
+
+.tag {
+  margin-left: 0.5rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 6px;
+  background: var(--ag-line);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--ag-muted);
+}
+
+.muted {
+  color: var(--ag-muted);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.25rem 0.7rem 0.25rem 0.55rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--c) 14%, white);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  max-width: 240px;
+  overflow-wrap: anywhere;
+}
+
+.chip::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--c);
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.25rem 0.7rem 0.25rem 0.55rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ag-forest) 12%, white);
+  color: var(--ag-forest);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.status::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.status--off {
+  background: var(--ag-line);
+  color: #46534b;
+}
+
+.cell-price {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.stock {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.stock--low::before,
+.stock--out::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.stock--low::before {
+  background: var(--ag-marigold);
+}
+
+.stock--out {
+  color: #a3281c;
+  font-weight: 600;
+}
+
+.stock--out::before {
+  background: #a3281c;
+}
+
+// ---------- Acciones ----------
+.col-actions {
+  width: 152px;
+  text-align: right;
+}
+
+.cell-actions {
+  white-space: nowrap;
+}
+
+.danger {
+  --mat-icon-button-icon-color: #a3281c;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+// ---------- Estado vacío ----------
+.empty {
+  padding: 3rem 1.5rem;
+  text-align: center;
+  color: var(--ag-muted);
+}
+
+.empty p {
+  margin: 0.25rem 0 0;
+}
+
+.empty__title {
+  font-family: var(--ag-font-display);
+  font-size: 1.35rem;
+  color: var(--ag-ink);
+}
+
+// ---------- Paginador ----------
+mat-paginator {
+  --mat-paginator-container-background-color: transparent;
+  border-top: 1px solid var(--ag-line);
+}
+
+// ---------- Móvil: cada fila pasa a ser una tarjeta ----------
+@media (max-width: 720px) {
+  .head__add {
+    width: 100%;
+  }
+
+  .table .mat-mdc-header-row {
+    display: none;
+  }
+
+  .table .mat-mdc-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      'product  status'
+      'category price'
+      'stock    actions';
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    height: auto;
+    padding: 1rem;
+    border-bottom: 1px solid var(--ag-line);
+  }
+
+  .table .mat-mdc-cell {
+    display: block;
+    padding: 0;
+    border: 0;
+    min-height: 0;
+  }
+
+  .table .col-product {
+    grid-area: product;
+  }
+
+  .table .cell-category {
+    grid-area: category;
+  }
+
+  .table .cell-price {
+    grid-area: price;
+    text-align: right;
+  }
+
+  .table .cell-stock {
+    grid-area: stock;
+    text-align: left;
+  }
+
+  .table .cell-stock::before {
+    content: 'Stock: ';
+    color: var(--ag-muted);
+  }
+
+  .table .cell-status {
+    grid-area: status;
+    justify-self: end;
+  }
+
+  .table .col-actions {
+    grid-area: actions;
+    width: auto;
+    display: flex;
+    justify-content: flex-end;
+  }
+}

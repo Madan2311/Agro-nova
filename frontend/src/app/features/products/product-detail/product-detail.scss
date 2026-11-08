@@ -1,0 +1,273 @@
+:host {
+  display: block;
+}
+
+.page {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: clamp(1.25rem, 3vw, 2.5rem) clamp(1rem, 4vw, 2rem) 3rem;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 1.25rem;
+  color: var(--ag-forest);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.back:hover {
+  text-decoration: underline;
+}
+
+.back mat-icon {
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+}
+
+// ---------- Estados de carga y error ----------
+.state {
+  display: grid;
+  justify-items: center;
+  gap: 0.75rem;
+  padding: 4rem 1rem;
+  text-align: center;
+  color: var(--ag-muted);
+}
+
+.state h1 {
+  font-size: 1.8rem;
+  color: var(--ag-ink);
+}
+
+.state p {
+  margin: 0;
+}
+
+// ---------- Estructura ----------
+.detail {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem 2.5rem;
+}
+
+@media (min-width: 860px) {
+  .detail {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    align-items: start;
+  }
+
+  .record {
+    grid-column: 1 / -1;
+  }
+}
+
+// ---------- Imagen ----------
+.media {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--ag-paper);
+  border: 1px solid var(--ag-line);
+  border-radius: 16px;
+}
+
+.media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.placeholder {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 0.5rem;
+  height: 100%;
+  background: color-mix(in srgb, var(--ag-forest) 8%, var(--ag-paper));
+  color: var(--ag-forest);
+}
+
+// ---------- Información ----------
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.badges {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.info h1 {
+  font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+  line-height: 1.1;
+}
+
+.sku {
+  margin: 0.4rem 0 0;
+  color: var(--ag-muted);
+}
+
+h2 {
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.25rem 0.7rem 0.25rem 0.55rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--c) 14%, white);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.chip::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--c);
+}
+
+.status {
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ag-forest) 12%, white);
+  color: var(--ag-forest);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.status--off {
+  background: var(--ag-line);
+  color: var(--ag-muted);
+}
+
+// ---------- Datos principales ----------
+.facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 0;
+  padding: 1.25rem;
+  background: var(--ag-paper);
+  border: 1px solid var(--ag-line);
+  border-radius: 16px;
+}
+
+.facts .stock {
+  font-size: 1.25rem;
+}
+
+dt {
+  font-size: 0.8125rem;
+  color: var(--ag-muted);
+}
+
+dd {
+  margin: 0.25rem 0 0;
+}
+
+.price {
+  font-family: var(--ag-font-body);
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+.stock {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-weight: 600;
+}
+
+.stock--low::before,
+.stock--out::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.stock--low::before {
+  background: var(--ag-marigold);
+}
+
+.stock--out {
+  color: #a3281c;
+}
+
+.stock--out::before {
+  background: #a3281c;
+}
+
+.desc {
+  margin: 0;
+  line-height: 1.65;
+  white-space: pre-line;
+}
+
+.muted {
+  margin: 0;
+  color: var(--ag-muted);
+}
+
+// ---------- Acciones ----------
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.actions button {
+  --mat-button-filled-container-height: 44px;
+  --mat-button-filled-container-shape: 12px;
+  --mat-button-outlined-container-height: 44px;
+  --mat-button-outlined-container-shape: 12px;
+}
+
+.danger {
+  --mat-button-outlined-label-text-color: #a3281c;
+  --mat-button-outlined-outline-color: #a3281c;
+}
+
+// ---------- Registro ----------
+.record {
+  padding: 1.25rem;
+  background: var(--ag-paper);
+  border: 1px solid var(--ag-line);
+  border-radius: 16px;
+}
+
+.record__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem 1.5rem;
+  margin: 0;
+}
+
+.mono {
+  font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace;
+  font-size: 0.8125rem;
+  word-break: break-all;
+}
+
+@media (max-width: 520px) {
+  .actions button {
+    flex: 1 1 100%;
+  }
+}

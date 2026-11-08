@@ -1,0 +1,135 @@
+<h2 mat-dialog-title class="title">
+  {{ product ? 'Editar producto' : 'Nuevo producto' }}
+</h2>
+
+<form [formGroup]="form" (ngSubmit)="save()" novalidate>
+  <mat-dialog-content class="grid">
+    <mat-form-field appearance="outline" class="span-2">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="name" [attr.maxlength]="limits.name" />
+      <mat-hint align="end">{{ form.controls.name.value.length }} / {{ limits.name }}</mat-hint>
+      @if (form.controls.name.hasError('required') || form.controls.name.hasError('blank')) {
+        <mat-error>Escribe el nombre del producto.</mat-error>
+      } @else if (form.controls.name.hasError('maxlength')) {
+        <mat-error>El nombre no puede superar los {{ limits.name }} caracteres.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>SKU</mat-label>
+      <input matInput formControlName="sku" [attr.maxlength]="limits.sku" />
+      <mat-hint align="end">{{ form.controls.sku.value.length }} / {{ limits.sku }}</mat-hint>
+      @if (form.controls.sku.hasError('required') || form.controls.sku.hasError('blank')) {
+        <mat-error>Escribe el SKU.</mat-error>
+      } @else if (form.controls.sku.hasError('maxlength')) {
+        <mat-error>El SKU no puede superar los {{ limits.sku }} caracteres.</mat-error>
+      } @else if (form.controls.sku.hasError('taken')) {
+        <mat-error>Ya existe un producto con este SKU.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Categoría</mat-label>
+      <mat-select formControlName="category">
+        @for (c of categories; track c) {
+          <mat-option [value]="c">{{ c }}</mat-option>
+        }
+      </mat-select>
+      @if (form.controls.category.hasError('required')) {
+        <mat-error>Elige una categoría.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Precio</mat-label>
+      <span matTextPrefix>$&nbsp;</span>
+      <input
+        matInput
+        type="number"
+        inputmode="numeric"
+        min="0"
+        [attr.max]="limits.price"
+        formControlName="price"
+      />
+      @if (form.controls.price.hasError('required')) {
+        <mat-error>Escribe el precio.</mat-error>
+      } @else if (form.controls.price.hasError('min')) {
+        <mat-error>El precio no puede ser negativo.</mat-error>
+      } @else if (form.controls.price.hasError('max')) {
+        <mat-error>El precio máximo es {{ priceMax }}.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Stock</mat-label>
+      <input
+        matInput
+        type="number"
+        inputmode="numeric"
+        min="0"
+        [attr.max]="limits.stock"
+        formControlName="stock"
+      />
+      @if (form.controls.stock.hasError('required')) {
+        <mat-error>Escribe las unidades disponibles.</mat-error>
+      } @else if (form.controls.stock.hasError('max')) {
+        <mat-error>El stock máximo es {{ stockMax }} unidades.</mat-error>
+      } @else if (form.controls.stock.hasError('min') || form.controls.stock.hasError('pattern')) {
+        <mat-error>Usa un número entero, de 0 en adelante.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="span-2">
+      <mat-label>Descripción (opcional)</mat-label>
+      <textarea
+        matInput
+        rows="3"
+        formControlName="description"
+        [attr.maxlength]="limits.description"
+      ></textarea>
+      <mat-hint align="end">
+        {{ form.controls.description.value.length }} / {{ limits.description }}
+      </mat-hint>
+      @if (form.controls.description.hasError('maxlength')) {
+        <mat-error>
+          La descripción no puede superar los {{ limits.description }} caracteres.
+        </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="span-2">
+      <mat-label>Enlace de la imagen (opcional)</mat-label>
+      <input
+        matInput
+        type="url"
+        formControlName="imageUrl"
+        placeholder="https://"
+        [attr.maxlength]="limits.imageUrl"
+      />
+      @if (form.controls.imageUrl.hasError('url')) {
+        <mat-error>Escribe un enlace que empiece por http:// o https://.</mat-error>
+      } @else if (form.controls.imageUrl.hasError('maxlength')) {
+        <mat-error>El enlace no puede superar los {{ limits.imageUrl }} caracteres.</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="span-2 active-row">
+      <mat-slide-toggle formControlName="active">Producto activo</mat-slide-toggle>
+      <p class="hint">
+        Los productos inactivos siguen en el catálogo, pero quedan marcados como inactivos.
+      </p>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <button matButton type="button" mat-dialog-close [disabled]="saving()">Cancelar</button>
+    <button matButton="filled" type="submit" [disabled]="saving()">
+      @if (saving()) {
+        <mat-spinner diameter="18" />
+        Guardando…
+      } @else {
+        {{ product ? 'Guardar cambios' : 'Crear producto' }}
+      }
+    </button>
+  </mat-dialog-actions>
+</form>

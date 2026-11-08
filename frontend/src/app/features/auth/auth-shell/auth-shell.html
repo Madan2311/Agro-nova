@@ -1,0 +1,37 @@
+<main class="shell">
+  <section class="hero">
+    <svg
+      class="rows"
+      viewBox="0 0 600 800"
+      preserveAspectRatio="xMidYMid slice"
+      aria-hidden="true"
+      focusable="false"
+    >
+      @for (i of rows; track i) {
+        <g [attr.transform]="'translate(0 ' + (i * 34 - 120) + ')'">
+          <path
+            class="row"
+            [class.row--marigold]="i === 9"
+            [style.--i]="i"
+            pathLength="1"
+            d="M-60 210 C 90 120, 240 330, 400 215 S 640 110, 700 230"
+          />
+        </g>
+      }
+    </svg>
+
+    <app-brand class="hero__brand" />
+
+    <div class="hero__copy">
+      <h1>Cada insumo, en su lugar.</h1>
+      <p>
+        Controla fertilizantes, semillas, herramientas y alimento animal desde un solo
+        inventario.
+      </p>
+    </div>
+  </section>
+
+  <section class="panel">
+    <ng-content />
+  </section>
+</main>

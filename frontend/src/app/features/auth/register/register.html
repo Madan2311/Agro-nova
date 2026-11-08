@@ -1,0 +1,92 @@
+<app-auth-shell>
+  <form class="form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <h2>Crea tu cuenta</h2>
+    <p class="form__hint">Regístrate para consultar y gestionar el inventario.</p>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre completo</mat-label>
+      <input matInput formControlName="name" autocomplete="name" maxlength="80" />
+      @if (form.controls.name.hasError('required')) {
+        <mat-error>Escribe tu nombre.</mat-error>
+      } @else if (form.controls.name.hasError('minlength')) {
+        <mat-error>El nombre debe tener al menos 2 caracteres.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Correo electrónico</mat-label>
+      <input matInput type="email" formControlName="email" autocomplete="email" />
+      @if (form.controls.email.hasError('required')) {
+        <mat-error>Escribe tu correo.</mat-error>
+      } @else if (form.controls.email.hasError('email')) {
+        <mat-error>Revisa el formato del correo.</mat-error>
+      } @else if (form.controls.email.hasError('taken')) {
+        <mat-error>Este correo ya está registrado.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Contraseña</mat-label>
+      <input
+        matInput
+        formControlName="password"
+        autocomplete="new-password"
+        [type]="showPassword() ? 'text' : 'password'"
+        aria-describedby="password-rules"
+      />
+      <button
+        matIconButton
+        matSuffix
+        type="button"
+        (click)="showPassword.set(!showPassword())"
+        [attr.aria-label]="showPassword() ? 'Ocultar contraseñas' : 'Mostrar contraseñas'"
+        [attr.aria-pressed]="showPassword()"
+      >
+        <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+      @if (form.controls.password.hasError('required')) {
+        <mat-error>Escribe una contraseña.</mat-error>
+      } @else if (form.controls.password.hasError('maxlength')) {
+        <mat-error>Máximo 64 caracteres.</mat-error>
+      } @else {
+        <mat-error>Revisa los requisitos de abajo.</mat-error>
+      }
+    </mat-form-field>
+
+    <ul id="password-rules" class="rules" aria-label="Requisitos de la contraseña">
+      @for (r of rules(); track r.label) {
+        <li [class.rule--ok]="r.ok">
+          <mat-icon aria-hidden="true">{{ r.ok ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+          {{ r.label }}
+          <span class="sr-only">{{ r.ok ? '(cumplido)' : '(pendiente)' }}</span>
+        </li>
+      }
+    </ul>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Repite la contraseña</mat-label>
+      <input
+        matInput
+        formControlName="confirm"
+        autocomplete="new-password"
+        [type]="showPassword() ? 'text' : 'password'"
+      />
+      @if (form.controls.confirm.hasError('required')) {
+        <mat-error>Repite la contraseña.</mat-error>
+      } @else if (form.controls.confirm.hasError('mismatch')) {
+        <mat-error>Las contraseñas no coinciden.</mat-error>
+      }
+    </mat-form-field>
+
+    <button matButton="filled" class="submit" type="submit" [disabled]="loading()">
+      @if (loading()) {
+        <mat-spinner diameter="20" />
+        Creando cuenta…
+      } @else {
+        Crear cuenta
+      }
+    </button>
+
+    <p class="alt">¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión</a></p>
+  </form>
+</app-auth-shell>

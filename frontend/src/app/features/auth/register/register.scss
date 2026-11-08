@@ -1,0 +1,87 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  width: min(100%, 380px);
+}
+
+.form h2 {
+  font-size: 2rem;
+  line-height: 1.15;
+}
+
+.form__hint {
+  margin: 0.5rem 0 1.5rem;
+  line-height: 1.5;
+  color: var(--ag-muted);
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+// ---------- Requisitos de la contraseña ----------
+.rules {
+  display: grid;
+  gap: 0.3rem;
+  margin: 0 0 1rem;
+  padding: 0;
+  list-style: none;
+  font-size: 0.8125rem;
+  color: var(--ag-muted);
+}
+
+.rules li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.rules mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}
+
+.rule--ok {
+  color: var(--ag-forest);
+  font-weight: 600;
+}
+
+// ---------- Botón y enlace ----------
+.submit {
+  --mat-button-filled-container-height: 48px;
+  --mat-button-filled-container-shape: 12px;
+  margin-top: 0.75rem;
+  width: 100%;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.submit mat-spinner {
+  display: inline-block;
+  margin-right: 0.5rem;
+  --mat-progress-spinner-active-indicator-color: #ffffff;
+}
+
+.alt {
+  margin: 1.25rem 0 0;
+  text-align: center;
+  color: var(--ag-muted);
+}
+
+.alt a {
+  color: var(--ag-forest);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
